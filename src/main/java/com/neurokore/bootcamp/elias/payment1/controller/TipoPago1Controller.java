@@ -4,6 +4,7 @@ import com.neurokore.bootcamp.elias.payment1.dto.TipoPago1DTO;
 import com.neurokore.bootcamp.elias.payment1.service.TipoPago1;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,7 @@ import java.util.List;
 public class TipoPago1Controller {
 
     /** Servicio de pagos tipo 1 al que se delegan las operaciones. */
-    private TipoPago1 service;
+    private final TipoPago1 service;
 
     /**
      * Registra un nuevo pago.
@@ -40,6 +41,9 @@ public class TipoPago1Controller {
     @PostMapping
     public ResponseEntity<TipoPago1DTO> crearPago(@RequestBody TipoPago1DTO dto) {
         log.info("Creando tipo-pago1 con referencia: {} ", dto.getReferenciaNumerica());
+        if(Strings.isBlank(dto.getClaveRastreo())){
+            log.info("La clave de reastreo viene vacia: ");
+        }
         TipoPago1DTO creado = service.crearPago(dto);
         return new ResponseEntity<>(creado, HttpStatus.CREATED);
     }
